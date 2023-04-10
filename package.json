@@ -1,0 +1,19 @@
+{
+  "name": "it122",
+  "version": "1.0.0",
+  "description": "node package for it122 class",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexBuck1/it122.git"
+  },
+  "author": "Alex Buck",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexBuck1/it122/issues"
+  },
+  "homepage": "https://github.com/AlexBuck1/it122#readme"
+}
