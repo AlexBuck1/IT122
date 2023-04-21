@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>My Albums</h1>
+  <ul>
+    <% data.forEach(function(albums) { %>
+      <li>
+        <a href="/detail?id=<%= albums.id %>"><%= albums.name %></a>
+      </li>
+    <% }); %>
+  </ul>
+
+</body>
+</html>
