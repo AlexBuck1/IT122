@@ -1,0 +1,13 @@
+<html>
+    <body>
+        <a href="/">Home</a>
+<% if (result) { %>
+    <h2><%= name %> details</h2>
+    <li>Artist: <%= result.artist %></li>
+    <li>Label: <%= result.label %></li>
+<% } else { %>
+        <h2><%= name %> not found</h2>
+<% } %>
+
+    </body>
+</html>
