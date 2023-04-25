@@ -14,7 +14,7 @@ app.get('/', (req,res) => {
   res.render('home', { albums: data.getAll()});
 });
 
-app.get('/album/:name', (req, res) => {
+app.get('/albums/:name', (req, res) => {
     const name = req.params.name;
     res.render('detail', { album: data.getItem(name)});
 })

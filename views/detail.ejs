@@ -1,13 +1,16 @@
 <html>
-    <body>
-        <a href="/">Home</a>
-<% if (result) { %>
-    <h2><%= name %> details</h2>
-    <li>Artist: <%= result.artist %></li>
-    <li>Label: <%= result.label %></li>
-<% } else { %>
-        <h2><%= name %> not found</h2>
-<% } %>
 
-    </body>
+  
+  <body>
+  
+    <h1><%= album.name %></h1>
+    <li>Artist: <%= album.artist %></li>
+    <li>Label: <%= album.label %></li>
+    <li>Release Date: <%= album.release_date %></li>
+
+    
+
+    <p><a href="/">Back to Home Page</a></p>
+
+  </body>
 </html>
