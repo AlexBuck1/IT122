@@ -14,6 +14,11 @@ app.get('/', (req,res) => {
   res.render('home', { albums: data.getAll()});
 });
 
+app.get('/album/:name', (req, res) => {
+    const name = req.params.name;
+    res.render('detail', { album: data.getItem(name)});
+})
+
 // define 404 handler
 app.use((req,res) => {
  res.type('text/plain'); 
