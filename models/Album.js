@@ -16,7 +16,7 @@ mongoose.connection.on('open', () => {
   console.log('Mongoose connected.');
 });
 
-// define Book model in JSON key/value pairs
+// define Album model in JSON key/value pairs
 // values indicate the data type of each key
 const albumSchema = new Schema({
  name: { type: String, required: true },
