@@ -64,24 +64,24 @@ app.post('/api/v1/add/', (req,res, next) => {
     console.log(req.body)
     if (!req.body._id) { // insert new document
 
-        let album = new Album({title:req.body.title,author:req.body.author,pubdate:req.body.pubdate});
+        let album = new Album({title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate});
         album.save((err,newAlbum) => {
             if (err) return next(err);
             console.log(newAlbum)
             res.json({updated: 0, _id: newAlbum._id});
         });
     } else { // update existing document
-        Album.updateOne({ _id: req.body._id}, {title:req.body.title, author: req.body.author, pubdate: req.body.pubdate }, (err, result) => {
+        Album.updateOne({ _id: req.body._id}, {title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, (err, result) => {
             if (err) return next(err);
             res.json({updated: result.nModified, _id: req.body._id});
         });
     }
 });
 
-app.get('/api/v1/add/:title/:author/:pubdate', (req,res, next) => {
+app.get('/api/v1/add/:title/:artist/:label/:releaseDate', (req,res, next) => {
     // find & update existing item, or add new 
     let title = req.params.title;
-    Album.update({ title: title}, {title:title, author: req.params.author, pubdate: req.params.pubdate }, {upsert: true }, (err, result) => {
+    Album.update({ title: title}, {title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, {upsert: true }, (err, result) => {
         if (err) return next(err);
         // nModified = 0 for new item, = 1+ for updated item 
         res.json({updated: result.nModified});
