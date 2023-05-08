@@ -1,0 +1,50 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>React App Demo</title>
+
+  <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+
+<h2>Home</h2>
+
+<hr>
+<h3>Books</h3>
+
+<div id="root"></div>
+<script type="text/babel">
+
+    const albums = <%- items %>;
+    console.log(albums)
+
+    // click event handler
+    const showDetail = (event) => {
+        // <a href={"/detail?title="+item.title}>
+        console.log(event.target)
+        console.log(event.target.innerText)
+        console.log(event.target.id)
+        window.location.href = "/detail?name=" + event.target.innerText;
+    }
+
+    const Albums = (props) => {
+        // props is an array
+        console.log(props)
+        const listItems = props.data.map((item) =>
+        <li key={item._id} id={item._id} onClick={props.clickHandler}>
+            {item.name}
+        </li>);
+        return <ul>{listItems}</ul>
+    }
+
+    ReactDOM.render(
+        <div><Albums data={albums} clickHandler={showDetail} /></div>,
+    document.getElementById('root')
+    );
+
+</script>
+</body>
+</html>
