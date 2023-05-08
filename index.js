@@ -31,10 +31,10 @@ app.get('/albums/:name', (req, res, next) => {
         .catch(err => next(err));
 });
 
-app.get('/api/v1/album/:title', (req, res, next) => {
-    let title = req.params.title;
-    console.log(title);
-    Album.findOne({title: title}, (err, result) => {
+app.get('/api/v1/album/:name', (req, res, next) => {
+    let name = req.params.name;
+    console.log(name);
+    Album.findOne({name: name}, (err, result) => {
         if (err || !result) {
             res.status(404).json({"message":"not found"});
         } else {
@@ -64,24 +64,24 @@ app.post('/api/v1/add/', (req,res, next) => {
     console.log(req.body)
     if (!req.body._id) { // insert new document
 
-        let album = new Album({title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate});
+        let album = new Album({name:req.body.name,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate});
         album.save((err,newAlbum) => {
             if (err) return next(err);
             console.log(newAlbum)
             res.json({updated: 0, _id: newAlbum._id});
         });
     } else { // update existing document
-        Album.updateOne({ _id: req.body._id}, {title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, (err, result) => {
+        Album.updateOne({ _id: req.body._id}, {name:req.body.name,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, (err, result) => {
             if (err) return next(err);
             res.json({updated: result.nModified, _id: req.body._id});
         });
     }
 });
 
-app.get('/api/v1/add/:title/:artist/:label/:releaseDate', (req,res, next) => {
+app.get('/api/v1/add/:name/:artist/:label/:releaseDate', (req,res, next) => {
     // find & update existing item, or add new 
-    let title = req.params.title;
-    Album.update({ title: title}, {title:req.body.title,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, {upsert: true }, (err, result) => {
+    let name = req.params.name;
+    Album.update({ name: name}, {name:req.body.name,artist:req.body.artist,label:req.body.label,releaseDate:req.body.releaseDate}, {upsert: true }, (err, result) => {
         if (err) return next(err);
         // nModified = 0 for new item, = 1+ for updated item 
         res.json({updated: result.nModified});
