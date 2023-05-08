@@ -1,17 +1,19 @@
 
 <html>
+  <body>
+      <a href="/">Home</a>
+    <% if (result) { %>
+        <h2><%= name %> details</h2>
+      <li>Artist: <%= result.artist %></li>
+      <li>Label: <%= result.label %></li>
+      <li>Release Date: <%= result.releaseDate %></li>
+      <p>
+        <a href="/delete?name=<% result.name %>">Delete</a>
+      </p>
+      <% } else { %>
+              <h2><%= name %> not found</h2>
+        <% } %>
 
-  
-    <body>
-    
-      <h1><%= albums.name %></h1>
-      <li>Artist: <%= albums.artist %></li>
-      <li>Label: <%= albums.label %></li>
-      <li>Release Date: <%= albums.releaseDate %></li>
-  
-      
-  
-      <p><a href="/">Back to Home Page</a></p>
-  
-    </body>
-  </html>
+
+  </body>
+</html>

@@ -22,7 +22,7 @@ const albumSchema = new Schema({
  name: { type: String, required: true },
  artist: String,
  label: String,
- release_date: String
+ releaseDate: String
 });
 
 export const Album = mongoose.model('Album', albumSchema);
