@@ -1,9 +1,6 @@
 import express from 'express';
 import { Album } from "./models/Album.js";
 
-
-
-
 const app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('./public'));
@@ -27,7 +24,7 @@ app.get('/', (req, res, next) => {
     app.get('/detail', (req,res,next) => {
         Album.findOne({name:req.query.name}).lean()
         .then((book) => {
-            res.render('detail', {result: book, name: req.queary.name});
+            res.render('detail', {result: book, name: req.query.name});
         })
         .catch(err => next(err));
     });
@@ -38,7 +35,7 @@ app.get('/', (req, res, next) => {
     });
 
     //api's
-    app.get('/api/v1/book/:name', (req, res, next) => {
+    app.get('/api/v1/album/:name', (req, res, next) => {
         let name = req.params.name;
         Album.findOne({name: name}, (err, result) => {
             if (err || !result) return next(err);
@@ -53,8 +50,8 @@ app.get('/', (req, res, next) => {
         });
     });
 
-    app.get('/api/v1/delete/:name', (req, res, next) => {
-        Album.deleteOne({"name":req.params.name}, (err, result) => {
+    app.get('/api/v1/delete/name', (req, res, next) => {
+        Album.deleteOne({"name":req.params.id}, (err, result) => {
             if (err) return next(err);
             res.json({"deleted": result});
         });
