@@ -53,8 +53,8 @@ app.get('/', (req, res, next) => {
         });
     });
 
-    app.get('/api/v1/delete/:id', (req, res, next) => {
-        Album.deleteOne({"_id":req.params.id}, (err, result) => {
+    app.get('/api/v1/delete/:name', (req, res, next) => {
+        Album.deleteOne({"name":req.params.name}, (err, result) => {
             if (err) return next(err);
             res.json({"deleted": result});
         });
