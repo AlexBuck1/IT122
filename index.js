@@ -35,39 +35,37 @@ app.get('/', (req, res, next) => {
     });
 
     //api's
-    app.get('/api/v1/album/:name', (req, res, next) => {
+    app.get('/api/album/:name', (req, res, next) => {
         let name = req.params.name;
-        Album.findOne({name: name}, (err, result) => {
-            if (err || !result) return next(err);
+        console.log(name);
+        Album.findOne({name: name}).then((album) => {
+            res.json(album);
+        })
+        .catch(err => next(err));
+    });
+
+    app.get('/api/albums', (req, res, next) => {
+        Album.find({}).then((err, result) => {
+            if(err) {
+                res.send(err);
+            }
             res.json(result);
         });
     });
 
-    app.get('/api/v1/albums', (req, res, next) => {
-        Album.find((err,results) => {
-            if (err || !results) return next(err);
-            res.json(results);
+    app.get('/api/delete/:name', (req, res, next) => {
+        Album.deleteOne({"name":req.params.name}).then((err, rusult) => {
+            if (err) {
+                return next(err);
+            }
+            else {
+                console.log(result)
+                res.json({"deleted": result});
+            }
         });
     });
 
-    app.get('/api/v1/delete/name', (req, res, next) => {
-        Album.deleteOne({"name":req.params.id}, (err, result) => {
-            if (err) return next(err);
-            res.json({"deleted": result});
-        });
-    });
-
-    app.post('/api/v1/add/', (req, res, next) => {
-        if (!req.body._id) {
-            let album = new Album(req.body);
-            album.save((err,newAlbum) => {
-                if (err) return next(err);
-                res.json({updated: 0, _id: newAlbum._id});
-            });
-        }
-    });
-
-    app.get('/api/v1/add/:name/:artist/:label/:releasDate', (req, res, next) => {
+    app.get('/api/add/:name/:artist/:label/:releasDate', (req, res, next) => {
         let name = req.params.name;
         Album.updateMany({name: name}, {name: name, artist: req.params.artist, label: req.params.label, releaseDate: req.params.releaseDate}, {upsert: true}, (err, result) => {
             if (err) return next(err);
