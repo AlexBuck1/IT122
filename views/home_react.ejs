@@ -18,33 +18,77 @@
 <div id="root"></div>
 <script type="text/babel">
 
-    const albums = <%- items %>;
-    console.log(albums)
-
-    // click event handler
-    const showDetail = (event) => {
-        // <a href={"/detail?title="+item.title}>
-        console.log(event.target)
-        console.log(event.target.innerText)
-        console.log(event.target.id)
-        window.location.href = "/detail?name=" + event.target.innerText;
-    }
-
-    const Albums = (props) => {
+const Albums = (props) => {
         // props is an array
-        console.log(props)
         const listItems = props.data.map((item) =>
         <li key={item._id} id={item._id} onClick={props.clickHandler}>
-            {item.name}
+            {item.title}
         </li>);
         return <ul>{listItems}</ul>
     }
 
-    ReactDOM.render(
-        <div><Albums data={albums} clickHandler={showDetail} /></div>,
-    document.getElementById('root')
-    );
+    const ItemDetail = (props) => {
+        return <div>
+        <hr />
+            <h3>Album Details</h3>
+            <form>
+                title: <input type="text" name="title" value={props.item.title || ""} onChange={props.handleChange} /><br/>
+                artist: <input type="text" name="artist" value={props.item.artist || ""} onChange={props.handleChange}/><br/>
+                label: <input type="text" name="label" value={props.item.label || ""} onChange={props.handleChange} /><br/>
+                releaseDate: <input type="text" name="releaseDate" value={props.item.releaseDate || ""} onChange={props.handleChange} /><br/>
+            </form>
+            <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+        </div>
+    }
 
+
+    const AlbumApp = (props) => {
+        const [items, setItems] = React.useState(<%- items %>);
+        const [currentItem, setCurrentItem] = React.useState({});
+
+        // list click event handler
+        const selectItem = (event) => {
+            const found = items.find((item) => {
+                return item.title === event.target.innerText;
+            });
+            setCurrentItem(found);
+        }
+
+        const clearForm = () => {
+            setCurrentItem({});
+        }
+
+        // update list state
+        const handleChange = (event) => {
+          let newItem = { ...currentItem } ;
+          newItem[event.target.title] = event.target.value;
+          // update currentItem state
+          setCurrentItem(newItem);
+          // update list state
+          items.find((item, index) => {
+            if (item._id == newItem._id) {
+                items[index] = newItem;
+                setItems(items);
+            }
+          })
+        }
+
+        return (
+            <div> <h2>Albums Inventory</h2>
+                <Albums data={items} clickHandler={selectItem} />
+                <ItemDetail
+                  item={currentItem}
+                  handleChange={handleChange}
+                  clearForm={clearForm}
+                />
+            </div>
+        );
+
+    }
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render( <AlbumApp />);
 </script>
 </body>
 </html>

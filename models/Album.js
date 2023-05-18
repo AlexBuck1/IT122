@@ -19,7 +19,7 @@ mongoose.connection.on('open', () => {
 // define Album model in JSON key/value pairs
 // values indicate the data type of each key
 const albumSchema = new Schema({
- name: { type: String, required: true },
+ title: { type: String, required: true },
  artist: String,
  label: String,
  releaseDate: String

@@ -22,9 +22,9 @@ app.get('/', (req, res, next) => {
     });
 
     app.get('/detail', (req,res,next) => {
-        Album.findOne({name:req.query.name}).lean()
+        Album.findOne({title:req.query.title}).lean()
         .then((book) => {
-            res.render('detail', {result: book, name: req.query.name});
+            res.render('detail', {result: book, title: req.query.title});
         })
         .catch(err => next(err));
     });
@@ -35,10 +35,10 @@ app.get('/', (req, res, next) => {
     });
 
     //api's
-    app.get('/api/album/:name', (req, res, next) => {
-        let name = req.params.name;
-        console.log(name);
-        Album.findOne({name: name}).then((album) => {
+    app.get('/api/album/:title', (req, res, next) => {
+        let title = req.params.title;
+        console.log(title);
+        Album.findOne({title: title}).then((album) => {
             res.json(album);
         })
         .catch(err => next(err));
@@ -53,8 +53,8 @@ app.get('/', (req, res, next) => {
         });
     });
 
-    app.get('/api/delete/:name', (req, res, next) => {
-        Album.deleteOne({"name":req.params.name}).then((err, rusult) => {
+    app.get('/api/delete/:title', (req, res, next) => {
+        Album.deleteOne({"title":req.params.title}).then((err, rusult) => {
             if (err) {
                 return next(err);
             }
@@ -65,9 +65,9 @@ app.get('/', (req, res, next) => {
         });
     });
 
-    app.get('/api/add/:name/:artist/:label/:releasDate', (req, res, next) => {
-        let name = req.params.name;
-        Album.updateMany({name: name}, {name: name, artist: req.params.artist, label: req.params.label, releaseDate: req.params.releaseDate}, {upsert: true}, (err, result) => {
+    app.get('/api/add/:title/:artist/:label/:releasDate', (req, res, next) => {
+        let title = req.params.title;
+        Album.updateMany({title: title}, {title: title, artist: req.params.artist, label: req.params.label, releaseDate: req.params.releaseDate}, {upsert: true}, (err, result) => {
             if (err) return next(err);
             res.json({updated: result.nModified});
         });

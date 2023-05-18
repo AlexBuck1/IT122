@@ -3,15 +3,15 @@
   <body>
       <a href="/">Home</a>
     <% if (result) { %>
-        <h2><%= name %> details</h2>
+        <h2><%= title %> details</h2>
       <li>Artist: <%= result.artist %></li>
       <li>Label: <%= result.label %></li>
       <li>Release Date: <%= result.releaseDate %></li>
       <p>
-        <a href="/delete?name=<% result.name %>">Delete</a>
+        <a href="/delete?title=<% result.title %>">Delete</a>
       </p>
       <% } else { %>
-              <h2><%= name %> not found</h2>
+              <h2><%= title %> not found</h2>
         <% } %>
 
 
