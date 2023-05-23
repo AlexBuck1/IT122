@@ -13,7 +13,6 @@
 <h2>Home</h2>
 
 <hr>
-<h3>My Albums</h3>
 
 <div id="root"></div>
 <script type="text/babel">
@@ -37,15 +36,27 @@ const Albums = (props) => {
                 label: <input type="text" name="label" value={props.item.label || ""} onChange={props.handleChange} /><br/>
                 releaseDate: <input type="text" name="releaseDate" value={props.item.releaseDate || ""} onChange={props.handleChange} /><br/>
             </form>
+            <button name="save" onClick={props.saveItem}>Save</button>&nbsp;
             <button name="clear" onClick={props.clearForm}>Clear</button>&nbsp;
+            <button name="delete" onClick={props.deleteItem}>Delete</button>&nbsp;
         </div>
     }
 
 
     const AlbumApp = (props) => {
-        const [items, setItems] = React.useState(<%- items %>);
+        const [items, setItems] = React.useState([]);
         const [currentItem, setCurrentItem] = React.useState({});
 
+        React.useEffect(() => {
+          const fetchData = async () => {
+            fetch("/api/albums").then(res => res.json())
+            .then((json) => {
+              setItems(json);
+            })
+          }
+          fetchData()
+        }, []);
+          
         // list click event handler
         const selectItem = (event) => {
             const found = items.find((item) => {
@@ -58,10 +69,48 @@ const Albums = (props) => {
             setCurrentItem({});
         }
 
+        const saveItem = () => {
+          if (!currentItem.title) {
+            return;
+          }
+          fetch("/api/add/", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify(currentItem)
+          })
+          .then(res => res.json())
+          .then((data) => {
+            // if an item doesnt have an id, then it wasnt saved in DB before
+            if (!currentItem._id) {
+              currentItem._id = data._id;
+              setCurrentItem(currentItem);
+              // update the item list
+              let newItems = [...items];
+              newItems.push(currentItem);
+              setItems(newItems);
+            }
+          })
+        }
+
+        const deleteItem = () => {
+          let id = currentItem._id;
+
+          fetch(`/api/delete/${id}`)
+          .then(res => res.json())
+          .then((data) => {
+            const newItems = items.filter((item) => {
+              return item._id !== id;
+            });
+          setItems(newItems);
+
+          setCurrentItem({})
+          });
+        }
+
         // update list state
         const handleChange = (event) => {
           let newItem = { ...currentItem } ;
-          newItem[event.target.title] = event.target.value;
+          newItem[event.target.name] = event.target.value;
           // update currentItem state
           setCurrentItem(newItem);
           // update list state
@@ -80,15 +129,15 @@ const Albums = (props) => {
                   item={currentItem}
                   handleChange={handleChange}
                   clearForm={clearForm}
+                  saveItem={saveItem}
+                  deleteItem={deleteItem}
                 />
             </div>
         );
 
     }
 
-    const container = document.getElementById('root');
-    const root = ReactDOM.createRoot(container);
-    root.render( <AlbumApp />);
+    ReactDOM.render(<AlbumApp />, document.getElementById('root'));
 </script>
 </body>
 </html>
