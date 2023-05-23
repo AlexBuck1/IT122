@@ -54,7 +54,7 @@ app.get('/', (req, res, next) => {
     });
 
     app.get('/api/delete/:title', (req, res, next) => {
-        Album.deleteOne({"title":req.params.title}).then((err, rusult) => {
+        Album.deleteOne({"title":req.params.title}).then((err, result) => {
             if (err) {
                 return next(err);
             }
@@ -64,6 +64,22 @@ app.get('/', (req, res, next) => {
             }
         });
     });
+
+    app.post('/api/add/', (req,res, next) => {
+    // find & update existing item, or add new 
+    if (!req.body._id) { // insert new document
+        let album = new Album(req.body);
+        album.save((err,newAlbum) => {
+            if (err) return next(err);
+            res.json({updated: 0, _id: newAlbum._id});
+        });
+    } else { // update existing document
+        Album.updateOne({ _id: req.body._id}, {title:req.body.title, author: req.body.author, pubdate: req.body.pubdate }, (err, result) => {
+            if (err) return next(err);
+            res.json({updated: result.nModified, _id: req.body._id});
+        });
+    }
+});
 
     app.get('/api/add/:title/:artist/:label/:releasDate', (req, res, next) => {
         let title = req.params.title;
